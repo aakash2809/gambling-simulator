@@ -119,5 +119,5 @@ gamblingToatalAmountUpdate = () => {
 
 console.log(`Welcome to Gambling Simulator`);
 gamblingToatalAmountUpdate();
-console.log(`\nLuckiest day     ${findLuckiestDay()}`);
+console.log(`\nLuckiest day   ${findLuckiestDay()}`);
 console.log(`Unluckiest day   ${findUnLuckiestDay()}`);
