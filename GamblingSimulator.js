@@ -2,8 +2,8 @@ var stake = 100;
 const BET_AMOUNT = 1;
 var fiftyPercentageLoss = stake - (stake / 100) * 50;
 var fiftyPercentageWin = stake + (stake / 100) * 50;
-var maximumWinMonth;
-var maxiMumLossMonth;
+//var maximumWinMonth;
+//var maxiMumLossMonth;
 var NumberOfDaysPerMonth = {
     "Jan": 31, "Feb": 28, "Mar": 31, "Apr": 30, "May": 31, "Jun": 30,
     "jul": 31, "Aug": 31, "Sep": 30, "Oct": 31, "Nov": 30, "Dec": 31
@@ -21,18 +21,18 @@ var dayCountMapforMaxLoss = {
     "5": 0, "6": 0, "7": 0
 };
 
-//Check for win or loss
+//check for win or loss
 checkWinOrLoss = () => {
-    ((Math.floor(Math.random() * 10) % 2) == BET_AMOUNT) ?
-        console.log(`Win`) : console.log(`Loss`);
+    ((Math.floor(Math.random() * 10) % 2) == BET_AMOUNT) ? (result = true) : (result = false);
+
+    return result;
 }
 
-//This mthod for resign for the day if 50% loss or 50% win and resignDay
+//This mthod for resign for the day if 50% loss or 50% win and re
 resignDay = () => {
     let cash = stake;
     while (cash < fiftyPercentageWin && cash > fiftyPercentageLoss) {
-        ((Math.floor(Math.random() * 10) % 2) == BET_AMOUNT) ?
-            (cash = cash + 1) : (cash = cash - 1);
+        checkWinOrLoss() ? (cash = cash + 1) : (cash = cash - 1);
     }
     return cash;
 }
@@ -61,7 +61,7 @@ findLuckiestDay = () => {
     return dayNameMap[winKey];
 }
 
-//Find Unluckiest day and return it.
+//Find Unluckiest day and return it 
 findUnLuckiestDay = () => {
     var maxLossValue = 0;
     var LossKey = 1;
@@ -73,6 +73,35 @@ findUnLuckiestDay = () => {
     }
 
     return dayNameMap[LossKey];
+}
+
+//Function to take decision whether continue from next months or not
+decideToContinuePlay = (totalLostAmount, totalWonAmount) => {
+    const prompt = require('prompt-sync')();
+    var decided;
+    const YES = 1;
+    const NO = 2;
+
+    if (totalWonAmount > totalLostAmount) {
+        let userChoice = Number(prompt(`\nYou won , would you like to continue....gambling 
+        Yes - 1 No - 2\n`));
+
+        switch (userChoice) {
+            case YES:
+                decided = true;
+                break;
+            case NO:
+                decided = false;
+                break;
+            default:
+                console.log("No match");
+        }
+    } else {
+        console.log("Have loss in this month so stop playing from next month ");
+        decided = false;
+    }
+
+    return decided;
 }
 
 //This method is for play and update win and loss money day wise
@@ -114,10 +143,21 @@ gamblingToatalAmountUpdate = () => {
         }
 
         printMonthlyRecord(monthName, totalLostAmount, totalWonAmount, numberOfLostDays, numberOfWonDays);
+
+        if (decideToContinuePlay(totalLostAmount, totalWonAmount)) {
+            continue;
+        }
+        else {
+            break;
+        }
+
     }
 }
 
 console.log(`Welcome to Gambling Simulator`);
 gamblingToatalAmountUpdate();
-console.log(`\nLuckiest day   ${findLuckiestDay()}`);
+console.log(`Luckiest day     ${findLuckiestDay()}`);
 console.log(`Unluckiest day   ${findUnLuckiestDay()}`);
+
+
+
